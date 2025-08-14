@@ -1,0 +1,47 @@
+4096 words (4 bytes * 4096) address space.
+
+Data: 15 bit integer + 1 bit for sign
+Instruction: 4 bit op-code + 12 bit address.
+
+4 byte ACC
+4 byte IR
+3 byte PC (each bit displayed by ON or OFF)
+4 byte SR
+
+START button
+STOP button
+LOAD PC | low 12 bits of SR -> PC
+EXAMINE button | PC -> IR | PC++
+DEPOSIT button | SR -> [PC] | PC++
+
+3 byte MAR
+4 byte MBR
+4 byte ZR
+
+ISA:
+Opcode-Address
+bbbb-bbbbbbbbbbb
+
+0000-HLT | Halts computer. START->1 causes computer to begin. Address ignored.
+0001-ADD | Address added to ACC->ACC. If ->ACC > 2^15 - 1 || ->ACC < -2^15, then stop computer. Contents of Address unchanged.
+0010-XOR | XOR of contents of Address with ACC->ACC. Contents of Address unchanged.
+0011-AND | AND of contents of Address with ACC->ACC. Contents of Address unchanged.
+0100-IOR | OR of conntents of Address with ACC->ACC. Contents of Address unchanged.
+0101-NOT | NOT of contents of ACC->ACC. Address ignored.
+0110-LDA | Contents of Address->ACC. Contents of Address unchanged. 
+0111-STA | Contents of ACC->Address. Contents of ACC unchanged.
+1000-SRJ | Contents of PC | low 12 bits of ACC. Address->PC. Used to jump to subroutine.
+1001-JMA | If sign of ACC=1, Address->PC. if sign of ACC=0, nothing.
+1010-JMP | Address->PC.
+1011-INP | Higher 8 bits of ACC->0, TBI
+1100-OUT | 
+1101-RAL | ACC << 1. Address ignored.
+1110-CSA | SR->ACC. Address ignored.
+1111-NOP | No op. Address ignored.
+
+Machine Cycle:
+FETCH:
+	[PC]->IR
+	PC++
+EXECUTE:
+	[IR] Analyzed, decoded, executed.
